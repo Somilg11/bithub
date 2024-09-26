@@ -6,15 +6,17 @@ import Repos from "../components/Repos";
 import Search from "../components/Search";
 import SortRepos from "../components/SortRepos";
 import Spinner from "../components/Spinner";
+import { useAuth } from "../context/AuthContext";
 
 const HomePage = () => {
+	const { user } = useAuth();
 	const [userProfile, setUserProfile] = useState(null);
 	const [repos, setRepos] = useState([]);
 	const [loading, setLoading] = useState(false);
 
 	const [sortType, setSortType] = useState("recent");
 
-	const getUserProfileAndRepos = useCallback(async (username = "Somilg11") => {
+	const getUserProfileAndRepos = useCallback(async (username) => {
     setLoading(true);
     try {
         // Fetch user profile and repositories
@@ -37,8 +39,8 @@ const HomePage = () => {
 
 
 	useEffect(() => {
-		getUserProfileAndRepos();
-	}, [getUserProfileAndRepos]);
+		if (user && user.username)getUserProfileAndRepos();
+	}, [getUserProfileAndRepos, user]);
 
 	const onSearch = async (e, username) => {
 		e.preventDefault();
